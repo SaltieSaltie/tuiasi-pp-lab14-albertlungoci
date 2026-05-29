@@ -19,18 +19,23 @@ class EinsteinSolver:
         self._prolog = Prolog()
         self._prolog.consult(str(PROLOG_FILE))
 
-    # TODO: Implementează solve() — returnează naționalitatea proprietarului peștelui.
-    # Hint: folosește list(self._prolog.query("einstein(Owner)"))
-    #       și extrage valoarea cheii "Owner" din primul rezultat.
     def solve(self) -> str:
         """Returnează naționalitatea proprietarului peștelui."""
-        raise NotImplementedError("De implementat")
+        rezultate = list(self._prolog.query("einstein(Owner)"))
+        return str(rezultate[0]["Owner"])
 
-    # TODO: Implementează get_solution() — returnează lista completă a celor 5 case.
-    # Fiecare casă este un dicționar cu cheile:
-    #   {"culoare": ..., "nationalitate": ..., "bautura": ..., "animal": ..., "tigari": ...}
-    # Hint: interogează predicatul solution/1 și prelucrează structura House Prolog
-    #       (un termen compus de tipul house(Culoare, Nat, Bautura, Animal, Tigari)).
     def get_solution(self) -> list[dict]:
         """Returnează lista celor 5 case cu toate atributele lor."""
-        raise NotImplementedError("De implementat")
+        rezultate = list(self._prolog.query("solution(Houses)"))
+        houses_raw = rezultate[0]["Houses"]
+        solutie = []
+        for casa in houses_raw:
+            args = casa.args
+            solutie.append({
+                "culoare": str(args[0]),
+                "nationalitate": str(args[1]),
+                "bautura": str(args[2]),
+                "animal": str(args[3]),
+                "tigari": str(args[4]),
+            })
+        return solutie

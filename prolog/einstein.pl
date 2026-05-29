@@ -31,36 +31,50 @@
 % ============================================================
 
 % next_to(X, Y, List) — X și Y sunt case vecine în lista List
-%
-% TODO: Decomentați și completați predicatul next_to/3:
-% next_to(X, Y, [X,Y|_]).
-% next_to(X, Y, [Y,X|_]).
-% next_to(X, Y, [_|T]) :- next_to(X, Y, T).
+next_to(X, Y, [X,Y|_]).
+next_to(X, Y, [Y,X|_]).
+next_to(X, Y, [_|T]) :- next_to(X, Y, T).
 
 % ============================================================
-% TODO: Implementați predicatul solution/1 care instanțiază
-% lista celor 5 case și verifică toate cele 15 constrângeri.
-%
-% Schelet de pornire:
-%
-% solution(Houses) :-
-%     Houses = [house(_,_,_,_,_), house(_,_,_,_,_), house(_,_,_,_,_),
-%               house(_,_,_,_,_), house(_,_,_,_,_)],
-%     % Indiciu 8: persoana din mijloc bea lapte
-%     Houses = [_, _, house(_, _, lapte, _, _), _, _],
-%     % Indiciu 9: norvegianul e primul
-%     Houses = [house(_, norvegian, _, _, _) | _],
-%     % Indiciu 1: britanicul locuiește în casa roșie
-%     member(house(rosu, britanic, _, _, _), Houses),
-%     % Indiciu 2: suedezul ține câine
-%     member(house(_, suedez, _, caine, _), Houses),
-%     % ... adăugați restul constrângerilor
-%     true.
+% solution/1 — instanțiază lista celor 5 case cu toate constrângerile
+% ============================================================
+solution(Houses) :-
+    Houses = [house(_,_,_,_,_), house(_,_,_,_,_), house(_,_,_,_,_),
+              house(_,_,_,_,_), house(_,_,_,_,_)],
+    % Indiciu 8: persoana din mijloc bea lapte
+    Houses = [_, _, house(_, _, lapte, _, _), _, _],
+    % Indiciu 9: norvegianul e primul
+    Houses = [house(_, norvegian, _, _, _) | _],
+    % Indiciu 1: britanicul locuiește în casa roșie
+    member(house(rosu, britanic, _, _, _), Houses),
+    % Indiciu 2: suedezul ține câine
+    member(house(_, suedez, _, caine, _), Houses),
+    % Indiciu 3: danezul bea ceai
+    member(house(_, danez, ceai, _, _), Houses),
+    % Indiciu 4: casa verde este imediat la stânga casei albe
+    next_to(house(verde, _, _, _, _), house(alb, _, _, _, _), Houses),
+    % Indiciu 5: proprietarul casei verzi bea cafea
+    member(house(verde, _, cafea, _, _), Houses),
+    % Indiciu 6: persoana care fumează Pall Mall ține o pasăre
+    member(house(_, _, _, pasare, pallmall), Houses),
+    % Indiciu 7: proprietarul casei galbene fumează Dunhill
+    member(house(galben, _, _, _, dunhill), Houses),
+    % Indiciu 10: persoana care fumează Blend locuiește lângă cea cu pisica
+    next_to(house(_, _, _, _, blend), house(_, _, _, pisica, _), Houses),
+    % Indiciu 11: omul cu calul locuiește lângă cel care fumează Dunhill
+    next_to(house(_, _, _, cal, _), house(_, _, _, _, dunhill), Houses),
+    % Indiciu 12: persoana care fumează BlueMaster bea bere
+    member(house(_, _, bere, _, bluemaster), Houses),
+    % Indiciu 13: germanul fumează Prince
+    member(house(_, german, _, _, prince), Houses),
+    % Indiciu 14: norvegianul locuiește lângă casa albastră
+    next_to(house(_, norvegian, _, _, _), house(albastru, _, _, _, _), Houses),
+    % Indiciu 15: persoana care fumează Blend are un vecin care bea apă
+    next_to(house(_, _, _, _, blend), house(_, _, apa, _, _), Houses).
 
 % ============================================================
-% TODO: Implementați einstein/1 care găsește proprietarul peștelui.
-%
-% einstein(Owner) :-
-%     solution(Houses),
-%     member(house(_, Owner, _, peste, _), Houses).
+% einstein/1 — găsește proprietarul peștelui
 % ============================================================
+einstein(Owner) :-
+    solution(Houses),
+    member(house(_, Owner, _, peste, _), Houses).
